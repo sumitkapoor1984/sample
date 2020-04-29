@@ -1,0 +1,62 @@
+<div class="ui center aligned segment gadget" dnd-draggable
+     [dragEnabled]="true" [dragData]="instanceId" [dropZones]="['c0','c1','c2','c3','r0','r1']">
+
+      <a class="ui left corner label">
+        <i class="circle icon" [ngClass]="{'green':inRun, 'yellow':!inRun}"></i>
+  </a>
+    <app-gadget-header
+            (mouseover)="showGadgetControls(true)"
+            (mouseleave)="showGadgetControls(false)"
+            [globalOptions]="globalOptions"
+            [title]="title"
+            [inRun]="inRun"
+            [inConfig]="inConfig"
+            [actionInitiated]="actionInitiated"
+            [showOperationControls]="showOperationControls"
+            [gadgetHasOperationControls]="gadgetHasOperationControls"
+            [showConfigurationControl]="showConfigurationControl"
+            [showControls]="showControls"
+            (toggleConfigModeEvent)="toggleConfigMode()"
+            (removeEvent)="remove()"
+            (runEvent)="run()"
+            (stopEvent)="stop()">
+    </app-gadget-header>
+	 <div class="ui basic segment"> 
+      <div class="ui fluid icon input"  *ngIf="!inConfig">
+	<i class="search icon"></i>
+        <input [(ngModel)]="searchText" placeholder="search text goes here">
+                   
+    </div>
+	<br/>
+	<table | *ngIf="!inConfig">
+	 
+			<thead >
+				<tr>
+					<th> *ngFor="let header of listData | keyvalue"> {{header.value | titlecase}} </th>
+				</tr>
+			 </thead>
+		
+			<tbody >
+				<tr *ngFor="let vendor of data | filter : searchText;let i=index">
+						<td> *ngFor="let header of listData"> {{vendor[header]}} </td>
+				</tr>
+			</tbody>
+	    </table>
+	</div>
+    
+
+    <app-dynamic-form *ngIf="inConfig"
+                  [gadgetTags]="gadgetTags"
+                  [propertyPages]="propertyPages"
+                  [instanceId]="instanceId"
+                  (updatePropertiesEvent)="updateProperties($event)">
+    </app-dynamic-form>
+
+    <app-error-handler
+            [errorObject]="errorObject"
+            [errorExists]="errorExists">
+    </app-error-handler>
+	 <app-vis-drill-down-modal #drillDownPopUp></app-vis-drill-down-modal>
+
+</div>
+
